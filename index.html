@@ -65,7 +65,6 @@ body { margin: 0; padding: 0; }
         //         // }
         //     });
         // };
-
         map.addSource('route', {
             'type': 'geojson',
             'data': {
@@ -138,7 +137,41 @@ body { margin: 0; padding: 0; }
                 'line-width': 2
             }
         });
+
+        
+        map.loadImage('/map_icon.png', (error, image) => {
+            if (error) throw error;
+            // Add the loaded image to the style's sprite with the ID 'kitten'.
+            map.addImage('map_icon', image);
+                map.addSource('startP', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': posList[0][posList[0].length - 1]
+                    }
+                }
+            });
+            map.addLayer({
+                'id': 'startP',
+                'type': 'symbol',
+                'source': 'startP',
+                'layout': {
+                    'icon-image': 'map_icon',
+                    'icon-size': 0.1
+                },
+                // 'paint': {
+                //     'line-color': '#2afc97',
+                //     'line-width': 8
+                // }
+            });
+        });
+
+        
     });
+    // console.log(posList[0][0])
 </script>
 
 </body>

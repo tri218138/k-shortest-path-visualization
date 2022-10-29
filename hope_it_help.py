@@ -81,7 +81,7 @@ for idx in range(num_rows):
       listID.append(Points[-1].ID)
     else:
       listID.append(Points[idx].ID)
-  print(listID)
+  # print(listID)
   n = len(listID)
   if n >= 2:
     Adjacency[listID[0]].append(listID[1])
@@ -161,7 +161,7 @@ class PriorityQueue(object):
 			del self.queue[min_val]
 			return item
 		except IndexError:
-			print()
+			# print()
 			exit()
 
 # adjacency_matrix = [
@@ -220,38 +220,54 @@ def isTheyAreOne(des0, des1):
     return True
   return False
 
+df_des = pd.read_excel("destination.xlsx", usecols="A:C")
+df_des
+
 # source_name = input('Điểm khởi đầu của bạn là: ')
 # destination_name = input('Đích đến của bạn là: ')
+source_name = "Trường Đại học bách Khoa"
+destination_name = "Đại học Y Dược"
+start = -1
+end = -1
 
-# start = []
-# end = []
+k = 3
 
-# k = 3
+namePlace = df_des['Tên địa điểm'].tolist()
 
-# namePlace = df['Tên địa điểm'].tolist()
+for idx, x in enumerate(namePlace):
+  if isTheyAreOne(x, source_name):
+    start = idx
+  if isTheyAreOne(x, destination_name):
+    end = idx
+# namePlace
+print(start, end)
 
-# for idx, x in enumerate(namePlace):
-#   if isTheyAreOne(x, source_name):
-#     start.append(idx)
-#   if isTheyAreOne(x, destination_name):
-#     end.append(idx)
-# # namePlace
-# print(start, end)
+start = df_des.iloc(0)[start]
+end = df_des.iloc(0)[end]
 
-"""Nhập số đường đi gợi ý (không bắt buộc)"""
+start = Point([float(start[2]), float(start[1])])
+end = Point([float(end[2]), float(end[1])])
 
-# k = int(input('Nhập số đường đi gợi ý (default = 3): '))
+def get_closest_point(marker):
+  minVal = 99999
+  minIndex = 0
+  for p in Points:
+    tmp = distance(marker, p)
+    if minVal > tmp:
+      minVal = tmp
+      minIndex = p.ID
+  return minIndex
+
+start = get_closest_point(start)
+end = get_closest_point(end)
+
+print(start, end)
 
 """##Kết quả"""
 
-result = []
-# for i in range(len(start)):
-#   for j in range(len(end)):
-result = result + flow_from_A_to_B(0, 110, 3)
+result = flow_from_A_to_B(start, end, 3)
 
 result.sort(key= lambda x: x.len)
-# for r in result:
-#   r.draw_by_name()
 print(result)
 
 """## Lưu trữ"""
