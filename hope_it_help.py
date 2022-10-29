@@ -84,15 +84,19 @@ for idx in range(num_rows):
   # print(listID)
   n = len(listID)
   if n >= 2:
-    Adjacency[listID[0]].append(listID[1])
+    if not listID[1] in Adjacency[listID[0]]:
+      Adjacency[listID[0]].append(listID[1])
   for i in range(1, n - 1):
-    Adjacency[listID[i]].append(listID[i - 1])
-    Adjacency[listID[i]].append(listID[i + 1])
+    if not listID[i - 1] in Adjacency[listID[i]]:
+      Adjacency[listID[i]].append(listID[i - 1])
+    if not listID[i + 1] in Adjacency[listID[i]]:
+      Adjacency[listID[i]].append(listID[i + 1])
   if n >= 2:
-    Adjacency[listID[n - 1]].append(listID[n - 2])
+    if not listID[n - 2] in Adjacency[listID[n - 1]]:
+      Adjacency[listID[n - 1]].append(listID[n - 2])
     # print(listID[n - 1])
 
-Adjacency
+# print(Adjacency)
 
 """#Chuyển đổi dữ liệu sang class
 
@@ -107,8 +111,8 @@ class Route:
     return self.len < other.len
   def __le__(self, other):
     return self.len <= other.len
-  def add(self, v, len):
-    self.v.append(v)
+  def add(self, vID, len):
+    self.v.append(vID)
     self.len += len
   def get_tail(self):
     return self.v[-1]
@@ -196,10 +200,10 @@ def flow_from_A_to_B(start, end, k = 3):
         v = Adjacency[u][i]
         dist = distance(Points[v], Points[u])
         # if adjacency_matrix[u][i] == -1:
-        if dist > 0 and not v in shortest.get_vertices():
+        if not v in shortest.get_vertices():
           new_route = copy.deepcopy(shortest)
           new_route.add(v, dist)
-          # print(new_route)
+          # print(new_route.v)
           pq.push(new_route)
   return result
 
@@ -226,7 +230,8 @@ df_des
 # source_name = input('Điểm khởi đầu của bạn là: ')
 # destination_name = input('Đích đến của bạn là: ')
 source_name = "Trường Đại học bách Khoa"
-destination_name = "Đại học Y Dược"
+# destination_name = "Đại học Y DƯợc"
+destination_name = "Chợ Bến Thành"
 start = -1
 end = -1
 
@@ -258,23 +263,28 @@ def get_closest_point(marker):
       minIndex = p.ID
   return minIndex
 
-start = get_closest_point(start)
-end = get_closest_point(end)
+closest_start = get_closest_point(start)
+closest_end = get_closest_point(end)
 
-print(start, end)
+print(closest_start, closest_end)
 
 """##Kết quả"""
 
-result = flow_from_A_to_B(start, end, 3)
+result = flow_from_A_to_B(closest_start, closest_end, k)
 
 result.sort(key= lambda x: x.len)
 print(result)
 
+for res in result:
+  print(res.v)
+
 """## Lưu trữ"""
 f = open("result.txt", "w")
 for res in result:
+  f.write(str(start.X) + ' ' + str(start.Y) + '\n')
   for v in res.v:
     f.write(str(Points[v].X) + ' ' + str(Points[v].Y) + '\n')
-  f.write('@\n')
+  f.write(str(end.X) + ' ' + str(end.Y) + '@\n')
+  # f.write('@\n')
 f.write('@\n')
 f.close()
