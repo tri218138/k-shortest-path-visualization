@@ -272,7 +272,6 @@ print(closest_start, closest_end)
 
 result = flow_from_A_to_B(closest_start, closest_end, k)
 
-result.sort(key= lambda x: x.len)
 print(result)
 
 for res in result:
