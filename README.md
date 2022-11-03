@@ -13,3 +13,7 @@ From "Truong Dai hoc Bach Khoa" to "Cho Ben Thanh" (Viet Nam)
 > BackEnd: python  
 > FrontEnd: html5  
 > Database: txt
+## Discuss:  
+> Google Map's result is lightly different from our result because:  
+> Google Map using AI for reaching k fastest path according to traffic data  
+> While our algorithm based on reaching k shortest path
